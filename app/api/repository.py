@@ -56,6 +56,9 @@ class TradeResultRepository:
         result = await self.session.execute(query)
         return result.scalars().all()
 
+    async def add(self, trade_result: TradeResult):
+        self.session.add(trade_result)
+
     async def get_trading_results(
         self,
         oil_id: Optional[str] = None,
