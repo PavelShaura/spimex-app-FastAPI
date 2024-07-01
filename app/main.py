@@ -5,13 +5,13 @@ from redis import asyncio as aioredis
 from fastapi_cache import FastAPICache
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.routers import api_routers
 from app.config import settings
-from app.api.routers.check_and_update_router import check_and_update_router
 
 app = FastAPI(title="Spimex App")
 
-
-app.include_router(check_and_update_router)
+for router in api_routers:
+    app.include_router(router)
 
 
 @app.on_event("startup")

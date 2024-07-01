@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional, List
 
 
 class TradeResultSchema(BaseModel):
@@ -22,13 +22,14 @@ class TradeResultSchema(BaseModel):
         from_attributes = True
 
 
-class SuccessResponse(BaseModel):
+class TradeResultsResponse(BaseModel):
     status: str = "success"
-    data: Optional[Any]
-    details: str
+    data: List[TradeResultSchema]
+    details: str = None
 
 
-class ErrorResponse(BaseModel):
-    status: str = "error"
-    data: Optional[Any] = None
-    details: str
+class TradeResultsRequest(BaseModel):
+    oil_id: Optional[str] = None
+    delivery_type_id: Optional[str] = None
+    delivery_basis_id: Optional[str] = None
+    limit: int = 10

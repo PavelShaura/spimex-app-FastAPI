@@ -7,9 +7,9 @@ redis = aioredis.from_url(settings.REDIS_HOST, encoding="utf8", decode_responses
 
 
 async def clear_cache():
-    keys = redis.keys("fastapi-cache*")
+    keys = await redis.keys("fastapi-cache*")
     if keys:
-        redis.delete(*keys)
+        await redis.delete(*keys)
     print("Cache cleared")
 
 

@@ -660,17 +660,16 @@ all = ["email_validator (>=2.0.0)", "httpx (>=0.23.0)", "itsdangerous (>=1.1.0)"
 
 [[package]]
 name = "fastapi-cache2"
-version = "0.2.1"
+version = "0.1.9"
 description = "Cache for FastAPI"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "fastapi_cache2-0.2.1-py3-none-any.whl", hash = "sha256:532c24253ab8f162ba2f0a7dcccb98591424f0424c28da70346eb3c99daf2b06"},
-    {file = "fastapi_cache2-0.2.1.tar.gz", hash = "sha256:0c68803c5a7fdebfec3e4430fd08482c091344dc4dd55a00209a882220712f89"},
+    {file = "fastapi-cache2-0.1.9.tar.gz", hash = "sha256:816612f7b29b4ea4ed3b4e03c55b7f96b4e4d6dffce6a95e2cf5cf36a980eaaa"},
+    {file = "fastapi_cache2-0.1.9-py3-none-any.whl", hash = "sha256:5b6f32bc8e786d9fffe4f3ef343861cab276acc64fb5d8d09077524743ad3702"},
 ]
 
 [package.dependencies]
-aiohttp = {version = ">=3.8.3", markers = "python_version >= \"3.11\""}
 fastapi = "*"
 pendulum = "*"
 uvicorn = "*"
@@ -2525,4 +2524,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f2b7ef433b849911ed112e6345b63b13c6c8cea9fdefe09bf36185b7bde729e5"
+content-hash = "e7e5d689ead6eab4cd556f9a3e41778c178a0fa2a82fc72f0097b0fe506da39f"
