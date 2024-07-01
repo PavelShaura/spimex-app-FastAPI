@@ -19,8 +19,8 @@ redis = "^5.0.7"
 aiohttp = "^3.9.5"
 beautifulsoup4 = "^4.12.3"
 requests = "^2.32.3"
-pandas = "^2.2.2"
 xlrd = "^2.0.1"
+celery = {extras = ["redis"], version = "^5.4.0"}
 
 
 [build-system]

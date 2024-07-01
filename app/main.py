@@ -6,7 +6,7 @@ from fastapi_cache import FastAPICache
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.api.routes.check_and_update_route import check_and_update_router
+from app.api.routers.check_and_update_router import check_and_update_router
 
 app = FastAPI(title="Spimex App")
 

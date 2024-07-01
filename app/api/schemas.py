@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Any
 
 
 class TradeResultSchema(BaseModel):
@@ -19,4 +19,16 @@ class TradeResultSchema(BaseModel):
     updated_on: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class SuccessResponse(BaseModel):
+    status: str = "success"
+    data: Optional[Any]
+    details: str
+
+
+class ErrorResponse(BaseModel):
+    status: str = "error"
+    data: Optional[Any] = None
+    details: str
