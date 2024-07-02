@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  pg:
+    image: postgres:13-alpine
+    container_name: pg_app
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    restart: always
+
+  redis:
+     image: redis:7
+     container_name: redis_app
+     env_file:
+      - .env
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: spimex_app
+    command: ["/app/docker/app.sh"]
+    depends_on:
+      - pg
+      - redis
+
+  celery:
+    build:
+      context: .
+    container_name: celery_worker_app
+    command: ["/app/docker/celery.sh"]
+    env_file:
+      - .env
+    depends_on:
+      - redis
