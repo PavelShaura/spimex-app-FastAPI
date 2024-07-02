@@ -12,7 +12,6 @@ celery_app: Celery = Celery(
     "celery",
     broker=f"{settings.REDIS_HOST}:{settings.REDIS_PORT}/0",
     backend=f"{settings.REDIS_HOST}:{settings.REDIS_PORT}/0",
-    # broker="redis://127.0.0.1:6379/0",
 )
 
 celery_app.autodiscover_tasks(["worker.notify"])

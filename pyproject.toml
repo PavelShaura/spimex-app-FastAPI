@@ -21,8 +21,17 @@ requests = "^2.32.3"
 xlrd = "^2.0.1"
 celery = {extras = ["redis"], version = "^5.4.0"}
 fastapi-cache2 = "0.1.9"
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.7"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "app",
+]
+
+asyncio_mode="auto"

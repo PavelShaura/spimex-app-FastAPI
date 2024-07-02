@@ -35,7 +35,7 @@ async def check_and_update_data(start: int, end: int):
                     data=new_data, details=f"Added {len(new_data)} new reports"
                 )
             else:
-                return CheckAndUpdateResponse(data=None, details="No new reports to add")
+                return CheckAndUpdateResponse(data="No new reports to add")
     except Exception as e:
         await uow.rollback()
         raise HTTPException(

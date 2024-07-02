@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from fastapi_cache import FastAPICache
@@ -20,6 +21,7 @@ async def startup_event():
         settings.REDIS_HOST, encoding="utf8", decode_responses=True
     )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    FastAPICache.init(InMemoryBackend())
 
 
 origins = [

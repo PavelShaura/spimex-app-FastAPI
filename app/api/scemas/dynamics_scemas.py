@@ -9,7 +9,6 @@ from app.api.scemas.trade_result_scemas import TradeResultSchema
 class DynamicsResponse(BaseModel):
     status: str = "success"
     data: List[TradeResultSchema]
-    details: str = None
 
 
 class DynamicsRequest(BaseModel):

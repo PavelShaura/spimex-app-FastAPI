@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List, Optional
+from typing import List, Optional, Dict
 from sqlalchemy import select, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.models import TradeResult
@@ -42,16 +42,22 @@ class TradeResultRepository:
         end_date: Optional[date] = None,
     ) -> List[TradeResult]:
         query = select(TradeResult)
-        if oil_id:
-            query = query.where(TradeResult.oil_id == oil_id)
-        if delivery_type_id:
-            query = query.where(TradeResult.delivery_type_id == delivery_type_id)
-        if delivery_basis_id:
-            query = query.where(TradeResult.delivery_basis_id == delivery_basis_id)
+
+        filters: Dict[str, Optional[str]] = {
+            "oil_id": oil_id,
+            "delivery_type_id": delivery_type_id,
+            "delivery_basis_id": delivery_basis_id,
+        }
+
+        for column, value in filters.items():
+            if value:
+                query = query.where(getattr(TradeResult, column) == value)
+
         if start_date:
             query = query.where(TradeResult.date >= start_date)
         if end_date:
             query = query.where(TradeResult.date <= end_date)
+
         query = query.order_by(TradeResult.date.desc())
         result = await self.session.execute(query)
         return result.scalars().all()
@@ -60,19 +66,24 @@ class TradeResultRepository:
         self.session.add(trade_result)
 
     async def get_trading_results(
-        self,
-        oil_id: Optional[str] = None,
-        delivery_type_id: Optional[str] = None,
-        delivery_basis_id: Optional[str] = None,
-        limit: int = 10,
+            self,
+            oil_id: Optional[str] = None,
+            delivery_type_id: Optional[str] = None,
+            delivery_basis_id: Optional[str] = None,
+            limit: int = 10,
     ) -> List[TradeResult]:
         query = select(TradeResult)
-        if oil_id:
-            query = query.where(TradeResult.oil_id == oil_id)
-        if delivery_type_id:
-            query = query.where(TradeResult.delivery_type_id == delivery_type_id)
-        if delivery_basis_id:
-            query = query.where(TradeResult.delivery_basis_id == delivery_basis_id)
+
+        filters: Dict[str, Optional[str]] = {
+            'oil_id': oil_id,
+            'delivery_type_id': delivery_type_id,
+            'delivery_basis_id': delivery_basis_id,
+        }
+
+        for column, value in filters.items():
+            if value:
+                query = query.where(getattr(TradeResult, column) == value)
+
         query = query.order_by(TradeResult.date.desc()).limit(limit)
         result = await self.session.execute(query)
         return result.scalars().all()

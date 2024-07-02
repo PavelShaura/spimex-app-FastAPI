@@ -15,7 +15,6 @@ trade_result_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 )
 @cache(expire=60 * 60 * 24)
 async def get_trading_results(trade_results_request: TradeResultsRequest):
-    print(f"Received request: {trade_results_request}")
     try:
         async with UnitOfWork() as uow:
             results = await uow.trade_result_repository.get_trading_results(
@@ -27,5 +26,5 @@ async def get_trading_results(trade_results_request: TradeResultsRequest):
         return TradeResultsResponse(data=results)
     except Exception as e:
         raise HTTPException(
-            status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
+            status_code=500, detail=str(ErrorResponse(details=f"error {e}"))
         )

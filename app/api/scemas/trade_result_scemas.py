@@ -25,7 +25,6 @@ class TradeResultSchema(BaseModel):
 class TradeResultsResponse(BaseModel):
     status: str = "success"
     data: List[TradeResultSchema]
-    details: str = None
 
 
 class TradeResultsRequest(BaseModel):

@@ -1,6 +1,6 @@
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.declarative import declarative_base
 
 from app.config import settings
 
@@ -21,5 +21,4 @@ async def get_async_session():
         yield session
 
 
-class Base(DeclarativeBase):
-    pass
+Base = declarative_base(metadata=metadata)
