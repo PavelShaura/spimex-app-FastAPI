@@ -6,6 +6,12 @@ from app.api.models import TradeResult
 
 
 class TradeResultRepository:
+    """
+    Инициализирует репозиторий сессией базы данных.
+
+    Параметры:
+    - session (AsyncSession): Асинхронная сессия SQLAlchemy.
+    """
     def __init__(self, session: AsyncSession):
         self.session = session
 

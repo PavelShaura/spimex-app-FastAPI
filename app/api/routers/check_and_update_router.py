@@ -19,7 +19,14 @@ check_and_update_router = APIRouter(
     responses={500: {"model": ErrorResponse}},
 )
 @cache(expire=60 * 60 * 24)
-async def check_and_update_data(start: int, end: int):
+async def check_and_update_data(start: int, end: int) -> CheckAndUpdateResponse:
+    """
+    Обновляет данные, проверяя и добавляя новые отчёты за указанный период.
+
+    Параметры:
+    - start (int): Начальная дата в формате YYYY-MM-DD.
+    - end (int): Конечная дата в формате YYYY-MM-DD.
+    """
     try:
         async with UnitOfWork() as uow:
             last_report_date = await uow.trade_result_repository.get_last_report_date()

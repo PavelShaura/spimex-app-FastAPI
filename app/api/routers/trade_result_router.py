@@ -14,7 +14,10 @@ trade_result_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
     responses={500: {"model": ErrorResponse}},
 )
 @cache(expire=60 * 60 * 24)
-async def get_trading_results(trade_results_request: TradeResultsRequest):
+async def get_trading_results(trade_results_request: TradeResultsRequest) -> TradeResultsResponse:
+    """
+    Получает результаты торгов для указанных параметров.
+    """
     try:
         async with UnitOfWork() as uow:
             results = await uow.trade_result_repository.get_trading_results(

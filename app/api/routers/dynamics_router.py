@@ -5,7 +5,6 @@ from app.api.scemas.dynamics_scemas import DynamicsResponse, DynamicsRequest
 from app.api.scemas.error_scemas import ErrorResponse
 from app.api.unit_of_work import UnitOfWork
 
-
 dynamics_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 
 
@@ -15,7 +14,11 @@ dynamics_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
     responses={500: {"model": ErrorResponse}},
 )
 @cache(expire=60 * 60 * 24)
-async def get_dynamics(dynamics_request: DynamicsRequest):
+async def get_dynamics(dynamics_request: DynamicsRequest) -> DynamicsResponse:
+    """
+    Получает динамику данных для указанных параметров.
+
+    """
     try:
         async with UnitOfWork() as uow:
             results = await uow.trade_result_repository.get_dynamics(

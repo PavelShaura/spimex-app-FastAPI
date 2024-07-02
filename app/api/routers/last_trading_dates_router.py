@@ -5,7 +5,6 @@ from app.api.scemas.error_scemas import ErrorResponse
 from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
 from app.api.unit_of_work import UnitOfWork
 
-
 last_trading_dates_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 
 
@@ -15,7 +14,11 @@ last_trading_dates_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
     responses={500: {"model": ErrorResponse}},
 )
 @cache(expire=60 * 60 * 24)
-async def get_last_trading_dates(limit: int = Query(default=10, ge=1, le=100)):
+async def get_last_trading_dates(limit: int = Query(default=10, ge=1, le=100)) -> LastTradingDatesResponse:
+    """
+    Получает последние даты торгов с ограничением на количество возвращаемых дат.
+
+    """
     try:
         async with UnitOfWork() as uow:
             dates = await uow.trade_result_repository.get_last_trading_dates(limit)
