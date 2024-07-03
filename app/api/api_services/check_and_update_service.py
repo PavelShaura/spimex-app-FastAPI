@@ -1,6 +1,9 @@
 from datetime import datetime
 from typing import Any, Optional
 
+from fastapi import HTTPException
+
+from app.api.scemas.error_scemas import ErrorResponse
 from app.services.base_service import BaseService
 from app.api.unit_of_work import UnitOfWork
 from app.api.scemas.check_and_update_scemas import CheckAndUpdateResponse
@@ -13,16 +16,24 @@ class CheckAndUpdateService(BaseService):
         start = kwargs.get("start")
         end = kwargs.get("end")
         async with uow:
-            last_report_date = await self._get_last_report_date(uow)
-            new_data = await self._scrape_new_reports(start, end, last_report_date)
-            if new_data:
-                await self._save_new_data(new_data, uow)
-                await uow.commit()
-                return CheckAndUpdateResponse(
-                    data=new_data, details=f"Added {len(new_data)} new reports"
+            try:
+                last_report_date = await self._get_last_report_date(uow)
+                new_data = await self._scrape_new_reports(start, end, last_report_date)
+
+                if new_data:
+                    await self._save_new_data(new_data, uow)
+                    await uow.commit()
+                    return CheckAndUpdateResponse(
+                        data=new_data,
+                        details=f"Added {len(new_data)} new reports"
+                    )
+                else:
+                    return CheckAndUpdateResponse(data="No new reports to add")
+            except Exception as e:
+                await uow.rollback()
+                raise HTTPException(
+                    status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
                 )
-            else:
-                return CheckAndUpdateResponse(data="No new reports to add")
 
     async def _get_last_report_date(self, uow: UnitOfWork) -> Optional[datetime.date]:
         last_report_date = await uow.trade_result_repository.get_last_report_date()
