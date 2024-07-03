@@ -1,0 +1,25 @@
+from typing import List
+
+from app.services.base_service import BaseService
+from app.api.unit_of_work import UnitOfWork
+from app.api.scemas.dynamics_scemas import DynamicsResponse, DynamicsRequest
+from app.api.models import TradeResult
+
+
+class DynamicsService(BaseService):
+    async def execute(self, uow: UnitOfWork, **kwargs) -> DynamicsResponse:
+        dynamics_request: DynamicsRequest = kwargs.get("dynamics_request")
+        async with uow:
+            results = await self._get_dynamics(uow, dynamics_request)
+            return DynamicsResponse(data=results)
+
+    async def _get_dynamics(
+        self, uow: UnitOfWork, dynamics_request: DynamicsRequest
+    ) -> List[TradeResult]:
+        return await uow.trade_result_repository.get_dynamics(
+            oil_id=dynamics_request.oil_id,
+            delivery_type_id=dynamics_request.delivery_type_id,
+            delivery_basis_id=dynamics_request.delivery_basis_id,
+            start_date=dynamics_request.start_date,
+            end_date=dynamics_request.end_date,
+        )

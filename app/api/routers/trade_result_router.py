@@ -5,6 +5,7 @@ from typing import Annotated
 from app.api.scemas.error_scemas import ErrorResponse
 from app.api.scemas.trade_result_scemas import TradeResultsResponse, TradeResultsRequest
 from app.api.unit_of_work import UnitOfWork, get_uow
+from app.api.api_services.trade_result_service import GetTradingResultsService
 
 trade_result_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 
@@ -19,11 +20,9 @@ async def get_trading_results(
     uow: Annotated[UnitOfWork, Depends(get_uow)],
     trade_results_request: Annotated[TradeResultsRequest, Body()],
 ) -> TradeResultsResponse:
-    """
-    Получает результаты торгов для указанных параметров.
-    """
     try:
-        results = await uow.trade_result_repository.get_trading_results(
+        results = await GetTradingResultsService()(
+            uow,
             oil_id=trade_results_request.oil_id,
             delivery_type_id=trade_results_request.delivery_type_id,
             delivery_basis_id=trade_results_request.delivery_basis_id,

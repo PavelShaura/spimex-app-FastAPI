@@ -1,6 +1,6 @@
 import pytest
 from httpx import AsyncClient
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from fastapi import status
 
 from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
@@ -11,7 +11,6 @@ from sqlalchemy import insert
 
 @pytest.mark.asyncio
 async def test_get_last_trading_dates(ac: AsyncClient, fastapi_cache):
-    # Подготовка тестовых данных
     test_dates = [date(2024, 7, 1) - timedelta(days=i) for i in range(5)]
     async with async_session_maker() as session:
         for test_date in test_dates:
@@ -29,21 +28,16 @@ async def test_get_last_trading_dates(ac: AsyncClient, fastapi_cache):
             await session.execute(stmt)
         await session.commit()
 
-    # Отправка запроса
     response = await ac.get("/api/v1/last_trading_dates?limit=3")
 
-    # Проверка статуса ответа
     assert response.status_code == status.HTTP_200_OK
 
-    # Проверка структуры ответа
     data = response.json()
     assert "data" in data
 
-    # Проверка содержимого ответа
     last_trading_dates_response = LastTradingDatesResponse(**data)
     assert len(last_trading_dates_response.data) == 3
 
-    # Проверка данных в ответе
     for i, response_date in enumerate(last_trading_dates_response.data):
         expected_date = test_dates[i]
         assert response_date == expected_date
@@ -51,7 +45,6 @@ async def test_get_last_trading_dates(ac: AsyncClient, fastapi_cache):
 
 @pytest.mark.asyncio
 async def test_get_last_trading_dates_limit(ac: AsyncClient, fastapi_cache):
-    # Проверка ограничений на параметр limit
     response_min = await ac.get("/api/v1/last_trading_dates?limit=0")
     assert response_min.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
@@ -64,18 +57,14 @@ async def test_get_last_trading_dates_limit(ac: AsyncClient, fastapi_cache):
 
 @pytest.mark.asyncio
 async def test_get_last_trading_dates_empty(ac: AsyncClient, fastapi_cache):
-    # Очистка данных
     async with async_session_maker() as session:
         await session.execute(TradeResult.__table__.delete())
         await session.commit()
 
-    # Отправка запроса
     response = await ac.get("/api/v1/last_trading_dates?limit=10")
 
-    # Проверка статуса ответа
     assert response.status_code == status.HTTP_200_OK
 
-    # Проверка, что ответ содержит пустой список данных
     data = response.json()
     assert "data" in data
     assert len(data["data"]) == 0

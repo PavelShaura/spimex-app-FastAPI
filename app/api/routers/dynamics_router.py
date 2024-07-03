@@ -5,6 +5,7 @@ from typing import Annotated
 from app.api.scemas.dynamics_scemas import DynamicsResponse, DynamicsRequest
 from app.api.scemas.error_scemas import ErrorResponse
 from app.api.unit_of_work import UnitOfWork, get_uow
+from app.api.api_services.dynamics_service import DynamicsService
 
 dynamics_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 
@@ -23,14 +24,7 @@ async def get_dynamics(
     Получает динамику данных для указанных параметров.
     """
     try:
-        results = await uow.trade_result_repository.get_dynamics(
-            oil_id=dynamics_request.oil_id,
-            delivery_type_id=dynamics_request.delivery_type_id,
-            delivery_basis_id=dynamics_request.delivery_basis_id,
-            start_date=dynamics_request.start_date,
-            end_date=dynamics_request.end_date,
-        )
-        return DynamicsResponse(data=results)
+        return await DynamicsService()(uow, dynamics_request=dynamics_request)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=ErrorResponse(details=f"error {e}").dict()

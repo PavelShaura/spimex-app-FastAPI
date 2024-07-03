@@ -5,6 +5,7 @@ from typing import Annotated
 from app.api.scemas.error_scemas import ErrorResponse
 from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
 from app.api.unit_of_work import UnitOfWork, get_uow
+from app.api.api_services.last_trading_dates_service import LastTradingDatesService
 
 last_trading_dates_router = APIRouter(prefix="/api/v1", tags=["API_SPIMEX"])
 
@@ -23,8 +24,7 @@ async def get_last_trading_dates(
     Получает последние даты торгов с ограничением на количество возвращаемых дат.
     """
     try:
-        dates = await uow.trade_result_repository.get_last_trading_dates(limit)
-        return LastTradingDatesResponse(data=dates)
+        return await LastTradingDatesService()(uow, limit=limit)
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
