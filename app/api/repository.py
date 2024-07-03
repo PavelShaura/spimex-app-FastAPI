@@ -3,19 +3,16 @@ from typing import List, Optional, Dict
 from sqlalchemy import select, func, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.models import TradeResult
+from app.utils.base_repository import BaseRepository
 
 
-class TradeResultRepository:
+class TradeResultRepository(BaseRepository):
     """
     Инициализирует репозиторий сессией базы данных.
 
     Параметры:
     - session (AsyncSession): Асинхронная сессия SQLAlchemy.
     """
-
-    def __init__(self, session: AsyncSession):
-        self.session = session
-
     async def get_last_report_date(self) -> int:
         result = await self.session.execute(select(func.max(TradeResult.date)))
         last_date = result.scalar()

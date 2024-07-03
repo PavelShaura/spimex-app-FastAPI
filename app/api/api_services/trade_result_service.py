@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from app.api.models import TradeResult
 from app.api.unit_of_work import UnitOfWork
-from app.services.base_service import BaseService
+from app.utils.base_service import BaseService
 
 
 class GetTradingResultsService(BaseService):

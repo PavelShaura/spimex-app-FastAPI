@@ -2,23 +2,25 @@ from app.database import async_session_maker
 from app.api.repository import TradeResultRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.utils.base_repository import BaseRepository
+
 
 class UnitOfWork:
+    """
+          Инициализирует класс UnitOfWork с фабрикой асинхронных сессий.
+    """
     def __init__(self):
-        """
-        Инициализирует класс UnitOfWork с фабрикой асинхронных сессий.
-        """
         self.session_factory = async_session_maker
 
     async def __aenter__(self) -> "UnitOfWork":
         """
-        Асинхронный контекстный менеджер для открытия сессии и инициализации репозиториев.
+              Асинхронный контекстный менеджер для открытия сессии и инициализации репозиториев.
 
-        Возвращает:
-        - UnitOfWork: Объект текущего класса.
+              Возвращает:
+              - UnitOfWork: Объект текущего класса.
         """
         self.session: AsyncSession = self.session_factory()
-        self.trade_result_repository = TradeResultRepository(self.session)
+        self.trade_result_repository: BaseRepository = TradeResultRepository(self.session)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
