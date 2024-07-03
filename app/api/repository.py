@@ -12,6 +12,7 @@ class TradeResultRepository:
     Параметры:
     - session (AsyncSession): Асинхронная сессия SQLAlchemy.
     """
+
     def __init__(self, session: AsyncSession):
         self.session = session
 
@@ -72,18 +73,18 @@ class TradeResultRepository:
         self.session.add(trade_result)
 
     async def get_trading_results(
-            self,
-            oil_id: Optional[str] = None,
-            delivery_type_id: Optional[str] = None,
-            delivery_basis_id: Optional[str] = None,
-            limit: int = 10,
+        self,
+        oil_id: Optional[str] = None,
+        delivery_type_id: Optional[str] = None,
+        delivery_basis_id: Optional[str] = None,
+        limit: int = 10,
     ) -> List[TradeResult]:
         query = select(TradeResult)
 
         filters: Dict[str, Optional[str]] = {
-            'oil_id': oil_id,
-            'delivery_type_id': delivery_type_id,
-            'delivery_basis_id': delivery_basis_id,
+            "oil_id": oil_id,
+            "delivery_type_id": delivery_type_id,
+            "delivery_basis_id": delivery_basis_id,
         }
 
         for column, value in filters.items():

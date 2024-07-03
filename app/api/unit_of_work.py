@@ -43,3 +43,8 @@ class UnitOfWork:
         Асинхронно откатывает (rollback) текущую транзакцию.
         """
         await self.session.rollback()
+
+
+async def get_uow():
+    async with UnitOfWork() as uow:
+        yield uow
