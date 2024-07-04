@@ -24,11 +24,11 @@ async def check_and_update_data(
     end: Annotated[int, Query(...)],
 ) -> CheckAndUpdateResponse:
     """
-    Обновляет данные, проверяя и добавляя новые отчёты за указанный период.
+    Обновляет данные, проверяя и добавляя новые отчёты.
 
     Параметры:
-    - start (int): Начальная дата в формате YYYY-MM-DD.
-    - end (int): Конечная дата в формате YYYY-MM-DD.
+    - start (int): Начальная страница для парсинга.
+    - end (int): Конечная страница для парсинга.
     """
     try:
         return await CheckAndUpdateService()(uow, start=start, end=end)
