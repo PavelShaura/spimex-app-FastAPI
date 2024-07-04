@@ -13,6 +13,7 @@ class TradeResultRepository(BaseRepository):
     Параметры:
     - session (AsyncSession): Асинхронная сессия SQLAlchemy.
     """
+
     async def get_last_report_date(self) -> int:
         result = await self.session.execute(select(func.max(TradeResult.date)))
         last_date = result.scalar()

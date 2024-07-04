@@ -11,8 +11,12 @@ class LastTradingDatesService(BaseService):
     async def execute(self, uow: UnitOfWork, **kwargs) -> LastTradingDatesResponse:
         limit = kwargs.get("limit", 10)
         async with uow:
-            dates = await self._get_last_trading_dates(uow.trade_result_repository, limit)
+            dates = await self._get_last_trading_dates(
+                uow.trade_result_repository, limit
+            )
             return LastTradingDatesResponse(data=dates)
 
-    async def _get_last_trading_dates(self, repository: BaseRepository, limit: int) -> List[date]:
+    async def _get_last_trading_dates(
+        self, repository: BaseRepository, limit: int
+    ) -> List[date]:
         return await repository.get_last_trading_dates(limit)

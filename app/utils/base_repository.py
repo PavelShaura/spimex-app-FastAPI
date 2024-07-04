@@ -29,4 +29,3 @@ class BaseRepository(ABC):
     @abstractmethod
     async def get_trading_results(self, **kwargs):
         pass
-

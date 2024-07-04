@@ -16,31 +16,30 @@ class CheckAndUpdateService(BaseService):
     async def execute(self, uow: UnitOfWork, **kwargs) -> CheckAndUpdateResponse:
         start = kwargs.get("start")
         end = kwargs.get("end")
-
-        if start is None or end is None:
-            raise ValueError("start and end parameters are required")
-
         async with uow:
             try:
-                last_report_date = await self._get_last_report_date(uow.trade_result_repository)
+                last_report_date = await self._get_last_report_date(
+                    uow.trade_result_repository
+                )
                 new_data = await self._scrape_new_reports(start, end, last_report_date)
 
                 if new_data:
                     await self._save_new_data(new_data, uow)
                     await uow.commit()
                     return CheckAndUpdateResponse(
-                        data=new_data,
-                        details=f"Added {len(new_data)} new reports"
+                        data=new_data, details=f"Added {len(new_data)} new reports"
                     )
                 else:
                     return CheckAndUpdateResponse(data="No new reports to add")
             except Exception as e:
                 await uow.rollback()
                 raise HTTPException(
-                    status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
+                    status_code=500, detail=ErrorResponse(details=f"error {e}")
                 )
 
-    async def _get_last_report_date(self, repository: BaseRepository) -> Optional[datetime.date]:
+    async def _get_last_report_date(
+        self, repository: BaseRepository
+    ) -> Optional[datetime.date]:
         last_report_date = await repository.get_last_report_date()
         if isinstance(last_report_date, datetime):
             return last_report_date.date()
