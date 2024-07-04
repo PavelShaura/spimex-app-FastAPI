@@ -3,7 +3,10 @@ from fastapi_cache.decorator import cache
 from typing import Annotated
 
 from app.api.schemas.error_schemas import ErrorResponse
-from app.api.schemas.trade_result_schemas import TradeResultsResponse, TradeResultsRequest
+from app.api.schemas.trade_result_schemas import (
+    TradeResultsResponse,
+    TradeResultsRequest,
+)
 from app.api.unit_of_work import UnitOfWork, get_uow
 from app.api.api_services.trade_result_service import GetTradingResultsService
 

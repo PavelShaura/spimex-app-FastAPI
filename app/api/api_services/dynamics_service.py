@@ -14,9 +14,10 @@ class DynamicsService(BaseService):
     Предоставляет методы для выполнения основного процесса
     получения динамики торговых данных.
     """
+
     async def execute(self, uow: UnitOfWork, **kwargs) -> DynamicsResponse:
         dynamics_request: DynamicsRequest = kwargs.get("dynamics_request")
-        async with uow:
+        async with uow():
             results = await self._get_dynamics(
                 uow.trade_result_repository, dynamics_request
             )

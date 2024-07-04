@@ -13,12 +13,13 @@ class GetTradingResultsService(BaseService):
     Предоставляет методы для выполнения основного процесса
     получения результатов торговых данных.
     """
+
     async def execute(self, uow: UnitOfWork, **kwargs) -> List[TradeResult]:
         oil_id: Optional[str] = kwargs.get("oil_id")
         delivery_type_id: Optional[str] = kwargs.get("delivery_type_id")
         delivery_basis_id: Optional[str] = kwargs.get("delivery_basis_id")
         limit: int = kwargs.get("limit", 10)
-        async with uow:
+        async with uow():
             return await self._get_trading_results(
                 uow.trade_result_repository,
                 oil_id=oil_id,

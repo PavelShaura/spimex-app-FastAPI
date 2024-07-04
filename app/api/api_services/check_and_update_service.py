@@ -19,10 +19,15 @@ class CheckAndUpdateService(BaseService):
     Этот класс предоставляет методы для выполнения основного процесса
     проверки новых отчетов и их сохранения в базу данных.
     """
+
     async def execute(self, uow: UnitOfWork, **kwargs) -> CheckAndUpdateResponse:
         start = kwargs.get("start")
         end = kwargs.get("end")
-        async with uow:
+
+        if start is None or end is None:
+            raise ValueError("start and end parameters are required")
+
+        async with uow():
             try:
                 last_report_date = await self._get_last_report_date(
                     uow.trade_result_repository
@@ -31,14 +36,12 @@ class CheckAndUpdateService(BaseService):
 
                 if new_data:
                     await self._save_new_data(new_data, uow)
-                    await uow.commit()
                     return CheckAndUpdateResponse(
                         data=new_data, details=f"Added {len(new_data)} new reports"
                     )
                 else:
                     return CheckAndUpdateResponse(data="No new reports to add")
             except Exception as e:
-                await uow.rollback()
                 raise HTTPException(
                     status_code=500, detail=ErrorResponse(details=f"error {e}")
                 )

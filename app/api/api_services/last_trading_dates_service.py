@@ -14,9 +14,10 @@ class LastTradingDatesService(BaseService):
     Предоставляет методы для выполнения основного процесса
     получения последних дат торгов.
     """
+
     async def execute(self, uow: UnitOfWork, **kwargs) -> LastTradingDatesResponse:
         limit = kwargs.get("limit", 10)
-        async with uow:
+        async with uow():
             dates = await self._get_last_trading_dates(
                 uow.trade_result_repository, limit
             )

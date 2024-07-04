@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import date
 from typing import List, Optional, Any
 
+
 class BaseRepository(ABC):
     """
     Базовый класс репозитория для работы с асинхронной сессией SQLAlchemy.
