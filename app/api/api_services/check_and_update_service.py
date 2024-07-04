@@ -3,16 +3,22 @@ from typing import Any, Optional
 
 from fastapi import HTTPException
 
-from app.api.scemas.error_scemas import ErrorResponse
+from app.api.schemas.error_schemas import ErrorResponse
 from app.utils.base_service import BaseService
 from app.api.unit_of_work import UnitOfWork
-from app.api.scemas.check_and_update_scemas import CheckAndUpdateResponse
+from app.api.schemas.check_and_update_schemas import CheckAndUpdateResponse
 from app.utils.base_repository import BaseRepository
 from parser.scrapping import scrape_reports
 from parser.save_data import save_data_to_db
 
 
 class CheckAndUpdateService(BaseService):
+    """
+    Сервис для проверки и обновления данных о торгах.
+
+    Этот класс предоставляет методы для выполнения основного процесса
+    проверки новых отчетов и их сохранения в базу данных.
+    """
     async def execute(self, uow: UnitOfWork, **kwargs) -> CheckAndUpdateResponse:
         start = kwargs.get("start")
         end = kwargs.get("end")

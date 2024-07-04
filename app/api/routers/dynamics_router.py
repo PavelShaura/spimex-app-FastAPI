@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Body, Depends
 from fastapi_cache.decorator import cache
 from typing import Annotated
 
-from app.api.scemas.dynamics_scemas import DynamicsResponse, DynamicsRequest
-from app.api.scemas.error_scemas import ErrorResponse
+from app.api.schemas.dynamics_schemas import DynamicsResponse, DynamicsRequest
+from app.api.schemas.error_schemas import ErrorResponse
 from app.api.unit_of_work import UnitOfWork, get_uow
 from app.api.api_services.dynamics_service import DynamicsService
 

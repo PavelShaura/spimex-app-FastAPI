@@ -1,17 +1,18 @@
 from datetime import date
 from typing import List, Optional, Dict
+
 from sqlalchemy import select, func, delete
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.models import TradeResult
 from app.utils.base_repository import BaseRepository
 
 
 class TradeResultRepository(BaseRepository):
     """
-    Инициализирует репозиторий сессией базы данных.
+    Репозиторий для работы с результатами торгов.
 
-    Параметры:
-    - session (AsyncSession): Асинхронная сессия SQLAlchemy.
+    Предоставляет методы для получения и удаления данных о торгах,
+    а также для добавления новых записей и получения динамики торгов.
     """
 
     async def get_last_report_date(self) -> int:

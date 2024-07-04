@@ -3,7 +3,7 @@ from datetime import date
 from pydantic import BaseModel
 from typing import List, Optional
 
-from app.api.scemas.trade_result_scemas import TradeResultSchema
+from app.api.schemas.trade_result_schemas import TradeResultSchema
 
 
 class DynamicsResponse(BaseModel):

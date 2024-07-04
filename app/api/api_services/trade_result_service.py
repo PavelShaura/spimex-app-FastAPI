@@ -7,6 +7,12 @@ from app.utils.base_repository import BaseRepository
 
 
 class GetTradingResultsService(BaseService):
+    """
+    Сервис для получения результатов торгов.
+
+    Предоставляет методы для выполнения основного процесса
+    получения результатов торговых данных.
+    """
     async def execute(self, uow: UnitOfWork, **kwargs) -> List[TradeResult]:
         oil_id: Optional[str] = kwargs.get("oil_id")
         delivery_type_id: Optional[str] = kwargs.get("delivery_type_id")

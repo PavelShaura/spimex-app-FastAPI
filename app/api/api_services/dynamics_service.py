@@ -3,11 +3,17 @@ from typing import List
 from app.utils.base_repository import BaseRepository
 from app.utils.base_service import BaseService
 from app.api.unit_of_work import UnitOfWork
-from app.api.scemas.dynamics_scemas import DynamicsResponse, DynamicsRequest
+from app.api.schemas.dynamics_schemas import DynamicsResponse, DynamicsRequest
 from app.api.models import TradeResult
 
 
 class DynamicsService(BaseService):
+    """
+    Сервис для получения динамики торгов.
+
+    Предоставляет методы для выполнения основного процесса
+    получения динамики торговых данных.
+    """
     async def execute(self, uow: UnitOfWork, **kwargs) -> DynamicsResponse:
         dynamics_request: DynamicsRequest = kwargs.get("dynamics_request")
         async with uow:

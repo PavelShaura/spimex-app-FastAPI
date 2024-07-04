@@ -3,7 +3,7 @@ from httpx import AsyncClient
 from datetime import date, timedelta
 from fastapi import status
 
-from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
+from app.api.schemas.last_trading_dates_schemas import LastTradingDatesResponse
 from app.api.models import TradeResult
 from app.database import async_session_maker
 from sqlalchemy import insert

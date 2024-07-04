@@ -3,11 +3,17 @@ from datetime import date
 
 from app.utils.base_service import BaseService
 from app.api.unit_of_work import UnitOfWork
-from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
+from app.api.schemas.last_trading_dates_schemas import LastTradingDatesResponse
 from app.utils.base_repository import BaseRepository
 
 
 class LastTradingDatesService(BaseService):
+    """
+    Сервис для получения последних дат торгов.
+
+    Предоставляет методы для выполнения основного процесса
+    получения последних дат торгов.
+    """
     async def execute(self, uow: UnitOfWork, **kwargs) -> LastTradingDatesResponse:
         limit = kwargs.get("limit", 10)
         async with uow:

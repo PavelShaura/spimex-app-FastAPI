@@ -2,8 +2,8 @@ from fastapi import APIRouter, Query, HTTPException, Depends
 from fastapi_cache.decorator import cache
 from typing import Annotated
 
-from app.api.scemas.error_scemas import ErrorResponse
-from app.api.scemas.last_trading_dates_scemas import LastTradingDatesResponse
+from app.api.schemas.error_schemas import ErrorResponse
+from app.api.schemas.last_trading_dates_schemas import LastTradingDatesResponse
 from app.api.unit_of_work import UnitOfWork, get_uow
 from app.api.api_services.last_trading_dates_service import LastTradingDatesService
 

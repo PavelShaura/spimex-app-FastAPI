@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends, Body
 from fastapi_cache.decorator import cache
 from typing import Annotated
 
-from app.api.scemas.error_scemas import ErrorResponse
-from app.api.scemas.trade_result_scemas import TradeResultsResponse, TradeResultsRequest
+from app.api.schemas.error_schemas import ErrorResponse
+from app.api.schemas.trade_result_schemas import TradeResultsResponse, TradeResultsRequest
 from app.api.unit_of_work import UnitOfWork, get_uow
 from app.api.api_services.trade_result_service import GetTradingResultsService
 
@@ -20,6 +20,9 @@ async def get_trading_results(
     uow: Annotated[UnitOfWork, Depends(get_uow)],
     trade_results_request: Annotated[TradeResultsRequest, Body()],
 ) -> TradeResultsResponse:
+    """
+    Получает результаты торгов.
+    """
     try:
         results = await GetTradingResultsService()(
             uow,

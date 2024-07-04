@@ -3,7 +3,7 @@ from httpx import AsyncClient
 from datetime import date, datetime
 from fastapi import status
 
-from app.api.scemas.dynamics_scemas import DynamicsRequest, DynamicsResponse
+from app.api.schemas.dynamics_schemas import DynamicsRequest, DynamicsResponse
 from app.api.models import TradeResult
 from app.database import async_session_maker
 from sqlalchemy import insert
