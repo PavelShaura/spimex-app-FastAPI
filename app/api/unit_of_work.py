@@ -1,5 +1,4 @@
-from contextlib import asynccontextmanager
-from app.database import get_async_session
+from app.database import async_session_maker
 from app.api.repository import TradeResultRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,27 +11,31 @@ class UnitOfWork:
     """
 
     def __init__(self):
-        self.session_factory = get_async_session
+        self.session_factory = async_session_maker
 
-    @asynccontextmanager
-    async def __call__(self) -> "UnitOfWork":
+    async def __aenter__(self) -> "UnitOfWork":
         """
         Асинхронный контекстный менеджер для открытия сессии и инициализации репозиториев.
 
         Возвращает:
         - UnitOfWork: Объект текущего класса.
         """
-        async with self.session_factory() as session:
-            self.session: AsyncSession = session
-            self.trade_result_repository: BaseRepository = TradeResultRepository(self.session)
-            try:
-                yield self
-                await self.session.commit()
-            except Exception:
-                await self.session.rollback()
-                raise
-            finally:
-                await self.session.close()
+        self.session: AsyncSession = self.session_factory()
+        self.trade_result_repository: BaseRepository = TradeResultRepository(
+            self.session
+        )
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """
+        Асинхронный контекстный менеджер для закрытия сессии.
+
+        Параметры:
+        - exc_type: Тип исключения.
+        - exc_val: Значение исключения.
+        - exc_tb: Трассировка стека исключения.
+        """
+        await self.session.close()
 
     async def commit(self):
         """
@@ -48,6 +51,5 @@ class UnitOfWork:
 
 
 async def get_uow():
-    uow = UnitOfWork()
-    async with uow() as unit_of_work:
-        yield unit_of_work
+    async with UnitOfWork() as uow:
+        yield uow
