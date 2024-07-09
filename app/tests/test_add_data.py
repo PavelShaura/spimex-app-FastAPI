@@ -1,11 +1,13 @@
 from datetime import date
 
+import pytest
 from sqlalchemy import insert, select
 
 from app.api.models import TradeResult
-from tests.conftest import async_session_maker
+from app.tests.conftest import async_session_maker
 
 
+@pytest.mark.asyncio(scope="session")
 async def test_add_data():
     async with async_session_maker() as session:
         stmt = insert(TradeResult).values(

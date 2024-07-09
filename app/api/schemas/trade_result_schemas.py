@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
+
+from pydantic import ConfigDict
+from pydantic import BaseModel, Field
 
 
 class TradeResultSchema(BaseModel):
@@ -18,8 +20,7 @@ class TradeResultSchema(BaseModel):
     created_on: datetime = Field(default_factory=datetime.utcnow)
     updated_on: datetime = Field(default_factory=datetime.utcnow)
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TradeResultsResponse(BaseModel):

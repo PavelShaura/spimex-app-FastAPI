@@ -1,7 +1,7 @@
 from redis import asyncio as aioredis
 
 from app.config import settings
-from worker.tasks import celery_event_loop, celery_app
+from app.worker.tasks import celery_event_loop, celery_app
 
 redis = aioredis.from_url(settings.REDIS_HOST, encoding="utf8", decode_responses=True)
 

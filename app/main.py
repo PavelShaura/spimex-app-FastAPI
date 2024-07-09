@@ -1,4 +1,6 @@
 import uvicorn
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
@@ -9,20 +11,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routers import api_routers
 from app.config import settings
 
-app = FastAPI(title="Spimex App")
 
-for router in api_routers:
-    app.include_router(router)
-
-
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("App is starting up...")
     redis = aioredis.from_url(
         settings.REDIS_HOST, encoding="utf8", decode_responses=True
     )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
     FastAPICache.init(InMemoryBackend())
+    yield
+    print("App is shutting down...")
 
+
+app = FastAPI(lifespan=lifespan, title="Spimex App")
+
+for router in api_routers:
+    app.include_router(router)
 
 origins = [
     "http://localhost:8000",

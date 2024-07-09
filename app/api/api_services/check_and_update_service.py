@@ -8,8 +8,8 @@ from app.utils.base_service import BaseService
 from app.api.unit_of_work import UnitOfWork
 from app.api.schemas.check_and_update_schemas import CheckAndUpdateResponse
 from app.utils.base_repository import BaseRepository
-from parser.scrapping import scrape_reports
-from parser.save_data import save_data_to_db
+from app.utils.parser.scrapping import scrape_reports
+from app.utils.parser.save_data import save_data_to_db
 
 
 class CheckAndUpdateService(BaseService):

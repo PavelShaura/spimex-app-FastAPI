@@ -23,6 +23,7 @@ celery = {extras = ["redis"], version = "^5.4.0"}
 fastapi-cache2 = "0.1.9"
 pytest = "^8.2.2"
 pytest-asyncio = "^0.23.7"
+pytest-dotenv = "^0.5.2"
 
 
 [build-system]
@@ -31,7 +32,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 pythonpath = [
-  ".", "app",
+  "./app", "app",
+]
+
+env_files = [
+  ".test.env"
 ]
 
 asyncio_mode="auto"

@@ -1,18 +1,17 @@
-import pytest
 from httpx import AsyncClient
 from datetime import date, datetime
+
+import pytest
 from fastapi import status
 
-from app.api.schemas.trade_result_schemas import (
-    TradeResultsResponse,
-    TradeResultsRequest,
-)
+from app.api.schemas.trade_result_schemas import TradeResultsResponse
+
 from app.api.models import TradeResult
 from app.database import async_session_maker
 from sqlalchemy import insert
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_trading_results(ac: AsyncClient, fastapi_cache):
     test_date = date(2024, 7, 1)
     async with async_session_maker() as session:
@@ -59,7 +58,7 @@ async def test_get_trading_results(ac: AsyncClient, fastapi_cache):
     assert first_result.date == datetime(test_date.year, test_date.month, test_date.day)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_trading_results_error(ac: AsyncClient, fastapi_cache):
     invalid_request = {
         "oil_id": "INVALID",
@@ -73,7 +72,7 @@ async def test_get_trading_results_error(ac: AsyncClient, fastapi_cache):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_trading_results_empty(ac: AsyncClient, fastapi_cache):
     empty_request = {
         "oil_id": "NONEXISTENT",

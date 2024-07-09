@@ -3,9 +3,9 @@ import asyncio
 from datetime import date, datetime
 from typing import List, Dict, Any
 
-from parser.download_files import download_file
-from parser.get_links import fetch_page, get_report_links
-from parser.extract_xml import extract_report_data
+from app.utils.parser.download_files import download_file
+from app.utils.parser.get_links import fetch_page, get_report_links
+from app.utils.parser.extract_xml import extract_report_data
 
 BASE_URL = "https://spimex.com/markets/oil_products/trades/results/"
 

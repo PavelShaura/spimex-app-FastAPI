@@ -1,6 +1,7 @@
-import pytest
 from httpx import AsyncClient
 from datetime import date, timedelta
+
+import pytest
 from fastapi import status
 
 from app.api.schemas.last_trading_dates_schemas import LastTradingDatesResponse
@@ -9,7 +10,7 @@ from app.database import async_session_maker
 from sqlalchemy import insert
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_last_trading_dates(ac: AsyncClient, fastapi_cache):
     test_dates = [date(2024, 7, 1) - timedelta(days=i) for i in range(5)]
     async with async_session_maker() as session:
@@ -43,7 +44,7 @@ async def test_get_last_trading_dates(ac: AsyncClient, fastapi_cache):
         assert response_date == expected_date
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_last_trading_dates_limit(ac: AsyncClient, fastapi_cache):
     response_min = await ac.get("/api/v1/last_trading_dates?limit=0")
     assert response_min.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -55,7 +56,7 @@ async def test_get_last_trading_dates_limit(ac: AsyncClient, fastapi_cache):
     assert response_valid.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_last_trading_dates_empty(ac: AsyncClient, fastapi_cache):
     async with async_session_maker() as session:
         await session.execute(TradeResult.__table__.delete())

@@ -1,15 +1,17 @@
-import pytest
 from httpx import AsyncClient
 from datetime import date, datetime
+
+import pytest
+from sqlalchemy import insert
 from fastapi import status
 
-from app.api.schemas.dynamics_schemas import DynamicsRequest, DynamicsResponse
+from app.api.schemas.dynamics_schemas import DynamicsResponse
 from app.api.models import TradeResult
 from app.database import async_session_maker
-from sqlalchemy import insert
 
 
-@pytest.mark.asyncio
+
+@pytest.mark.asyncio(scope="session")
 async def test_get_dynamics(ac: AsyncClient, fastapi_cache):
     test_date = date(2024, 7, 1)
     async with async_session_maker() as session:
@@ -57,7 +59,7 @@ async def test_get_dynamics(ac: AsyncClient, fastapi_cache):
     assert first_result.date == datetime(test_date.year, test_date.month, test_date.day)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_get_dynamics_error(ac: AsyncClient, fastapi_cache):
     invalid_request = {
         "oil_id": "INVALID",

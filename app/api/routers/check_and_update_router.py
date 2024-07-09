@@ -33,6 +33,4 @@ async def check_and_update_data(
     try:
         return await CheckAndUpdateService()(uow, start=start, end=end)
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
-        )
+        raise HTTPException(status_code=500, detail=ErrorResponse(details=f"error {e}"))

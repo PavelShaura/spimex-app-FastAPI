@@ -26,6 +26,4 @@ async def get_dynamics(
     try:
         return await DynamicsService()(uow, dynamics_request=dynamics_request)
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
-        )
+        raise HTTPException(status_code=500, detail=ErrorResponse(details=f"error {e}"))
