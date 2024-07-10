@@ -36,6 +36,5 @@ async def get_trading_results(
         )
         return TradeResultsResponse(data=results)
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=str(ErrorResponse(details=f"error {e}"))
-        )
+        error_response = ErrorResponse(details=f"error {e}")
+        raise HTTPException(status_code=500, detail=error_response.model_dump())

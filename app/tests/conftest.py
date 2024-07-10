@@ -1,7 +1,7 @@
-import asyncio
 from typing import AsyncGenerator
 import pytest
 from httpx import AsyncClient, ASGITransport
+from unittest.mock import patch
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +13,12 @@ from app.database import get_async_session
 from app.config import settings
 from app.database import metadata
 from app.main import app
+
+
+@pytest.fixture(autouse=True, scope="function")
+def mock_aiohttp_session():
+    with patch('aiohttp.ClientSession') as mock_session:
+        yield mock_session
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -47,11 +53,9 @@ async def prepare_database():
         await conn.run_sync(metadata.drop_all)
 
 
-
 @pytest.fixture(scope="session")
 async def ac() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(
-        transport=ASGITransport(app=app),
-        base_url="http://test"
+        transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
         yield ac

@@ -26,6 +26,5 @@ async def get_last_trading_dates(
     try:
         return await LastTradingDatesService()(uow, limit=limit)
     except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=ErrorResponse(details=f"error {e}").dict()
-        )
+        error_response = ErrorResponse(details=f"error {e}")
+        raise HTTPException(status_code=500, detail=error_response.model_dump())
