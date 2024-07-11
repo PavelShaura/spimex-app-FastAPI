@@ -9,19 +9,33 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TEST_DB_HOST: "localhost"
+      TEST_DB_PORT: "5432"
+      TEST_DB_USER: "postgres"
+      TEST_DB_PASS: "postgres"
+      TEST_DB_NAME: "postgres"
+      DB_HOST: "localhost"
+      DB_PORT: "5432"
+      DB_NAME: "postgres"
+      DB_PASS: "postgres"
+      DB_USER: "postgres"
+      REDIS_HOST: "redis://127.0.0.1"
+      REDIS_PORT: "6379"
+
     services:
       postgres:
         image: postgres:13
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.9, "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v3
