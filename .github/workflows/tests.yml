@@ -10,26 +10,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TEST_DB_HOST: "localhost"
-      TEST_DB_PORT: "5432"
-      TEST_DB_USER: "postgres"
-      TEST_DB_PASS: "postgres"
-      TEST_DB_NAME: "postgres"
-      DB_HOST: "localhost"
-      DB_PORT: "5432"
-      DB_NAME: "postgres"
-      DB_PASS: "postgres"
-      DB_USER: "postgres"
-      REDIS_HOST: "redis://127.0.0.1"
-      REDIS_PORT: "6379"
+      TEST_DB_HOST: ${{ secrets.TEST_DB_HOST }}
+      TEST_DB_PORT: ${{ secrets.TEST_DB_PORT }}
+      TEST_DB_USER: ${{ secrets.TEST_DB_USER }}
+      TEST_DB_PASS: ${{ secrets.TEST_DB_PASS }}
+      TEST_DB_NAME: ${{ secrets.TEST_DB_NAME }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_USER: ${{ secrets.DB_USER }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
 
     services:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_USER: ${{ secrets.TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASS }}
+          POSTGRES_DB: ${{ secrets.TEST_DB_NAME }}
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -51,4 +51,4 @@ jobs:
         poetry install --no-interaction --no-ansi --no-root
     - name: Run tests with pytest
       run: |
-        pytest
+        pytest -v --cov=app/
