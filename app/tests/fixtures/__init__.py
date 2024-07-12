@@ -18,3 +18,5 @@ from app.tests.fixtures.last_trading_dates_fixtures import (
     last_trading_dates_limit_test_data,
     last_trading_dates_test_data,
 )
+from app.tests.fixtures.get_link_fixture import expected_links, mock_html_content
+from app.tests.fixtures.extract_report_data_fixture import mock_data, expected_result
