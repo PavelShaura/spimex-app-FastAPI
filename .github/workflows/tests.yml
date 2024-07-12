@@ -51,4 +51,4 @@ jobs:
         poetry install --no-interaction --no-ansi --no-root
     - name: Run tests with pytest
       run: |
-        pytest -v --cov=app/
+        pytest -v --cov=app/ --benchmark-verbose
