@@ -1,91 +1,41 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import date
-from typing import List, Optional, Any
+from typing import Generic, TypeVar, List, Optional, Any
+
+T = TypeVar("T")
 
 
-class BaseRepository(ABC):
+class BaseRepository(ABC, Generic[T]):
     """
     Базовый класс репозитория для работы с асинхронной сессией SQLAlchemy.
 
-    Этот класс предоставляет абстрактные методы для работы с данными о торгах.
+    Этот класс предоставляет абстрактные методы CRUD для работы с данными.
     """
 
     def __init__(self, session: AsyncSession):
-        """
-        Инициализация репозитория с асинхронной сессией.
-
-        Параметры:
-            session: Асинхронная сессия SQLAlchemy.
-        """
         self.session = session
 
     @abstractmethod
-    async def get_last_report_date(self) -> Optional[date]:
-        """
-        Получить дату последнего отчета.
-
-        Возвращает:
-            Дата последнего отчета или None, если данных нет.
-        """
+    async def add(self, entity: T) -> T:
+        """Создать новую запись."""
         pass
 
     @abstractmethod
-    async def delete_trade_results(self, date_from: date, date_to: date) -> int:
-        """
-        Удалить результаты торгов за указанный период.
-
-        Параметры:
-            date_from: Дата начала периода.
-            date_to: Дата окончания периода.
-        """
+    async def read(self, id: Any) -> Optional[T]:
+        """Прочитать запись по id."""
         pass
 
     @abstractmethod
-    async def get_last_trading_dates(self, limit: int) -> List[date]:
-        """
-        Получить последние даты торгов.
-
-        Параметры:
-            limit: Ограничение на количество возвращаемых дат.
-
-        Возвращает:
-            Список последних дат торгов.
-        """
+    async def update(self, entity: T) -> T:
+        """Обновить существующую запись."""
         pass
 
     @abstractmethod
-    async def get_dynamics(self, **kwargs: Any) -> List[Any]:
-        """
-        Получить динамику торгов.
-
-        Параметры:
-            kwargs: Дополнительные параметры для фильтрации динамики торгов.
-
-        Возвращает:
-            Список динамики торгов.
-        """
+    async def delete(self, id: Any) -> bool:
+        """Удалить запись по id."""
         pass
 
     @abstractmethod
-    async def add(self, entity: Any) -> None:
-        """
-        Добавить новый объект в базу данных.
-
-        Параметры:
-            entity: Объект для добавления.
-        """
-        pass
-
-    @abstractmethod
-    async def get_trading_results(self, **kwargs: Any) -> List[Any]:
-        """
-        Получить результаты торгов.
-
-        Параметры:
-            kwargs: Дополнительные параметры для фильтрации результатов торгов.
-
-        Возвращает:
-            Список результатов торгов.
-        """
+    async def list(self, **kwargs) -> List[T]:
+        """Получить список записей с возможностью фильтрации."""
         pass
