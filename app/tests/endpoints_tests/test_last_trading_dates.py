@@ -1,6 +1,5 @@
 import pytest
 from httpx import AsyncClient
-from datetime import date, timedelta
 
 from fastapi import status, HTTPException
 from sqlalchemy import insert
@@ -14,24 +13,10 @@ from app.api.api_services.last_trading_dates_service import LastTradingDatesServ
 @pytest.mark.usefixtures("fastapi_cache")
 class TestLastTradingDates:
     @pytest.mark.asyncio(scope="session")
-    @pytest.mark.parametrize(
-        "test_data,expected_count,limit",
-        [
-            (
-                [date(2024, 7, 1) - timedelta(days=i) for i in range(5)],
-                3,
-                3,
-            ),
-            (
-                [date(2024, 7, 1) - timedelta(days=i) for i in range(10)],
-                5,
-                5,
-            ),
-        ],
-    )
     async def test_get_last_trading_dates(
-        self, ac: AsyncClient, test_data: list, expected_count: int, limit: int
+        self, ac: AsyncClient, last_trading_dates_test_data
     ):
+        test_data, expected_count, limit = last_trading_dates_test_data
         async with async_session_maker() as session:
             for test_date in test_data:
                 stmt = insert(TradeResult).values(
@@ -60,17 +45,10 @@ class TestLastTradingDates:
             assert response_date == expected_date
 
     @pytest.mark.asyncio(scope="session")
-    @pytest.mark.parametrize(
-        "limit,expected_status",
-        [
-            (0, status.HTTP_422_UNPROCESSABLE_ENTITY),
-            (101, status.HTTP_422_UNPROCESSABLE_ENTITY),
-            (50, status.HTTP_200_OK),
-        ],
-    )
     async def test_get_last_trading_dates_limit(
-        self, ac: AsyncClient, limit: int, expected_status: int
+        self, ac: AsyncClient, last_trading_dates_limit_test_data
     ):
+        limit, expected_status = last_trading_dates_limit_test_data
         response = await ac.get(f"/api/v1/last_trading_dates?limit={limit}")
         assert response.status_code == expected_status
 

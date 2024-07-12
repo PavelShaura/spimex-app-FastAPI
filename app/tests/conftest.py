@@ -1,3 +1,6 @@
+from typing import AsyncGenerator
+
+import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
@@ -5,6 +8,7 @@ from sqlalchemy.pool import NullPool
 from app.database import get_async_session
 from app.config import settings
 from app.database import metadata
+from app.main import app
 from app.tests.fixtures import *
 
 
