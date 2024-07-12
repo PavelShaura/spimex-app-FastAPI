@@ -17,7 +17,7 @@ class TestExtractReportData:
         result = extract_report_data("dummy_path.xls")
         assert result == expected_result
 
-    def test_extract_report_data_empty(self, mocker):
+    def test_extract_report_data_empty(self, mocker, benchmark):
         mock_workbook = mocker.Mock(spec=xlrd.Book)
         mock_sheet = mocker.Mock()
         mock_sheet.nrows = 1
@@ -26,5 +26,5 @@ class TestExtractReportData:
 
         mocker.patch("xlrd.open_workbook", return_value=mock_workbook)
 
-        result = extract_report_data("dummy_path.xls")
+        result = benchmark(extract_report_data, "dummy_path.xls")
         assert result == []
